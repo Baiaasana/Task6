@@ -58,7 +58,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             if (binding.rememberMe.isChecked) {
                 observer()
             } else {
-                navigateToHomeFragment()
+                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(binding.etEmail.text.toString()))
             }
         }
     }
@@ -70,8 +70,9 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     when (it) {
                         is Resource.Success -> {
                             if (binding.rememberMe.isChecked) {
-                                viewModel.save(Constants.KEY, it.data?.token.toString())
-                                navigateToHomeFragment()
+                                viewModel.save(Constants.KEY_TOKEN, it.data?.token.toString())
+                                viewModel.save(Constants.KEY_EMAIL, binding.etEmail.text.toString())
+                                findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment(binding.etEmail.text.toString()))
                             }
                         }
                         is Resource.Error -> {
@@ -86,10 +87,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 }
             }
         }
-    }
-
-    private fun navigateToHomeFragment() {
-        findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToHomeFragment())
     }
 
     private fun isValidEmail(): Boolean =

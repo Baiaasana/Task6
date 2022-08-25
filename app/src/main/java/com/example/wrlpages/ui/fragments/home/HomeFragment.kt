@@ -1,11 +1,11 @@
 package com.example.wrlpages.ui.fragments.home
 
-import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.wrlpages.Constants
 import com.example.wrlpages.ui.fragments.base.BaseFragment
 import com.example.wrlpages.databinding.FragmentHomeBinding
@@ -15,6 +15,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
     private val viewModel: HomeViewModel by viewModels()
 
+    private val args: HomeFragmentArgs by navArgs()
 
     override fun listeners() {
         binding.btnLogout.setOnClickListener {
@@ -31,8 +32,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 //                    if (it.contains(stringPreferencesKey(Constants.KEY))){
 //                        binding.text.text = it[stringPreferencesKey(Constants.KEY)]
 //                    }
-                    binding.text.text = it[stringPreferencesKey(Constants.KEY)]
-                        ?: "No token \n session does not \n exist"
+//                    binding.text.text = it[stringPreferencesKey(Constants.KEY)]
+//                        ?: "No token \n session does not \n exist"
+
+                    binding.text.text = args.email
                 }
             }
         }
@@ -47,7 +50,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private fun logout() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.remove(Constants.KEY)
+                viewModel.remove(Constants.KEY_TOKEN)
+                viewModel.remove(Constants.KEY_EMAIL)
                 findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToWelcomeFragment())
             }
         }

@@ -1,6 +1,5 @@
 package com.example.wrlpages.ui.fragments.welcome
 
-import android.util.Log
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -32,8 +31,8 @@ class WelcomeFragment : BaseFragment<FragmentWelcomeBinding>(
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.getPreferences().collect {
-                    if (it.contains(stringPreferencesKey(Constants.KEY))) {
-                        findNavController().navigate(WelcomeFragmentDirections.actionWelcomeFragmentToHomeFragment())
+                    if (it.contains(stringPreferencesKey(Constants.KEY_TOKEN))) {
+                        findNavController().navigate(WelcomeFragmentDirections.actionWelcomeFragmentToHomeFragment(it[stringPreferencesKey(Constants.KEY_EMAIL)]))
                     }
                 }
             }
